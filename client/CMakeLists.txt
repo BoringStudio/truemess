@@ -1,0 +1,24 @@
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(CLIENT_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extlibs/x64)
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+	set(CLIENT_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extlibs/x86)
+endif()
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin/)
+
+file(GLOB CLIENT_SRCS
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+
+add_executable(client ${CLIENT_SRCS})
+
+target_link_libraries(client "${CLIENT_LIBS_DIR}/pdcurses.lib")
+

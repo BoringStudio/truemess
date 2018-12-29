@@ -1,0 +1,4 @@
+.vs
+build
+client/bin
+server/bin
