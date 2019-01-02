@@ -1,10 +1,9 @@
 #include "UserManager.h"
 
-#include "../Core/Core.h"
 #include "DatabaseManager.h"
 
 UserManager::UserManager(const Core& core) :
-	BaseManager(core)
+	Manager(core)
 {
 	m_databaseManager = core.get<DatabaseManager>();
 }

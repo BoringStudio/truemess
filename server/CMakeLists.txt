@@ -10,11 +10,32 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin/x86)
 endif()
 
-file(GLOB_RECURSE SERVER_SRCS
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+set(SRC_BASE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(SERVER_SRCS
+	"${SRC_BASE}/main.cpp"
+	"${SRC_BASE}/Core/Core.cpp"
+	"${SRC_BASE}/Core/Core.h"
+	"${SRC_BASE}/Managers/DatabaseManager.cpp"
+	"${SRC_BASE}/Managers/DatabaseManager.h"
+	"${SRC_BASE}/Managers/NetworkManager.cpp"
+	"${SRC_BASE}/Managers/NetworkManager.h"
+	"${SRC_BASE}/Managers/RoomManager.cpp"
+	"${SRC_BASE}/Managers/RoomManager.h"
+	"${SRC_BASE}/Managers/UserManager.cpp"
+	"${SRC_BASE}/Managers/UserManager.h"
+	"${SRC_BASE}/Stuff/Manager.h"
+	"${SRC_BASE}/Stuff/Stuff.h"
 )
+
+add_definitions(
+	-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+	-DASIO_STANDALONE 
+	-DASIO_HAS_STD_ADDRESSOF 
+	-DASIO_HAS_STD_ARRAY
+	-DASIO_HAS_CSTDINT
+	-DASIO_HAS_STD_SHARED_PTR
+	-DASIO_HAS_STD_TYPE_TRAITS)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 

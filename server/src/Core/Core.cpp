@@ -1,9 +1,11 @@
 #include "Core.h"
 
-Core::Core()
+BaseManager::BaseManager(const Core& core) :
+	m_core(core)
 {
 }
 
-Core::~Core()
+const Core& BaseManager::getCore() const
 {
+	return m_core;
 }

@@ -2,6 +2,7 @@
 
 #include "Core/Core.h"
 #include "Managers/DatabaseManager.h"
+#include "Managers/NetworkManager.h"
 #include "Managers/UserManager.h"
 #include "Managers/RoomManager.h"
 
@@ -11,6 +12,7 @@ public:
 	ServerCore()
 	{
 		m_databaseManager = provide<DatabaseManager>("truemess.db");
+		m_networkManager = provide<NetworkManager>();
 		m_userManager = provide<UserManager>();
 		m_roomManager = provide<RoomManager>();
 	}
@@ -18,12 +20,14 @@ public:
 	void run() override
 	{
 		m_databaseManager->init();
+		m_networkManager->init();
 		m_userManager->init();
 		m_roomManager->init();
 	}
 
 private:
 	DatabaseManager::ptr m_databaseManager;
+	NetworkManager::ptr m_networkManager;
 	UserManager::ptr m_userManager;
 	RoomManager::ptr m_roomManager;
 };

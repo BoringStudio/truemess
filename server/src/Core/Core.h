@@ -1,16 +1,19 @@
 #pragma once
 
+#include <mutex>
+#include <memory>
+#include <iostream>
 #include <typeindex>
 #include <unordered_map>
-#include <memory>
 
-#include "../Stuff/BaseManager.h"
+#include "../Stuff/Stuff.h"
+
+class BaseManager;
 
 class Core
 {
 public:
-	Core();
-	virtual ~Core();
+	virtual ~Core() = default;
 
 	virtual void run() = 0;
 
@@ -23,8 +26,27 @@ public:
 	template<typename T>
 	bool has() const;
 
+	template<typename... Args>
+	void print(Args&&... args) const;
+
+	template<typename T, typename... Args>
+	void print(Args&&... args) const;
+
 private:
-	std::pmr::unordered_map<std::type_index, std::shared_ptr<BaseManager>> m_managers;
+	std::unordered_map<std::type_index, std::shared_ptr<BaseManager>> m_managers;
+	mutable std::mutex m_logMutex;
+};
+
+class BaseManager
+{
+public:
+	explicit BaseManager(const Core& core);
+	virtual ~BaseManager() = default;
+
+	const Core& getCore() const;
+
+private:
+	const Core& m_core;
 };
 
 template<typename T, typename ... Args>
@@ -58,4 +80,24 @@ bool Core::has() const
 
 	const auto it = m_managers.find(std::type_index(typeid(T)));
 	return it != m_managers.end();
+}
+
+template<typename ... Args>
+void Core::print(Args&&... args) const
+{
+	std::unique_lock<std::mutex> lock(m_logMutex);
+
+	using dummy = int[];
+	dummy{ (std::cout << args, 0)... };
+	std::cout << std::endl;
+}
+
+template<typename T, typename ... Args>
+void Core::print(Args&&... args) const
+{
+	std::string prefix = "[";
+	prefix += detail::TypenameGetter<T>::get();
+	prefix += "] ";
+
+	print(prefix, std::forward<Args>(args)...);
 }

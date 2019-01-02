@@ -1,10 +1,9 @@
 #include "RoomManager.h"
 
-#include "../Core/Core.h"
 #include "DatabaseManager.h"
 
 RoomManager::RoomManager(const Core & core) :
-	BaseManager(core)
+	Manager(core)
 {
 	m_databaseManager = core.get<DatabaseManager>();
 }

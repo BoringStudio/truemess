@@ -2,11 +2,11 @@
 
 #include <memory>
 
-#include "../Stuff/BaseManager.h"
+#include "../Stuff/Manager.h"
 
 class DatabaseManager;
 
-class UserManager : public BaseManager, public PointerDefs<UserManager>
+class UserManager : public Manager<UserManager>
 {
 public:
 	explicit UserManager(const Core& core);

@@ -1,7 +1,7 @@
 #include "DatabaseManager.h"
 
 DatabaseManager::DatabaseManager(const Core& core, const std::string& db) :
-	BaseManager(core), m_name(db)
+	Manager(core), m_name(db)
 {
 	m_database = std::make_unique<sqlite3pp::database>(db.c_str());
 }
@@ -14,6 +14,8 @@ DatabaseManager::~DatabaseManager()
 void DatabaseManager::init()
 {
 	m_database = std::make_unique<sqlite3pp::database>(m_name.c_str());
+
+	log("initialized");
 }
 
 void DatabaseManager::execute(const std::string& sql)

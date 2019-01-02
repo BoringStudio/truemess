@@ -3,9 +3,9 @@
 #include <string>
 #include <sqlite3pp.h>
 
-#include "../Stuff/BaseManager.h"
+#include "../Stuff/Manager.h"
 
-class DatabaseManager : public BaseManager, public PointerDefs<DatabaseManager>
+class DatabaseManager : public Manager<DatabaseManager>
 {
 public:
 	DatabaseManager(const Core& core, const std::string& db);

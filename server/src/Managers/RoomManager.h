@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../Stuff/BaseManager.h"
+#include "../Stuff/Manager.h"
 
 class DatabaseManager;
 
@@ -12,7 +12,7 @@ struct Room
 	
 };
 
-class RoomManager : public BaseManager, public PointerDefs<RoomManager>
+class RoomManager : public Manager<RoomManager>
 {
 public:
 	explicit RoomManager(const Core& core);
