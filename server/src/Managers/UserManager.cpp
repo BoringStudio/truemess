@@ -10,7 +10,9 @@ UserManager::UserManager(const Core& core) :
 
 void UserManager::init()
 {
-	m_databaseManager->execute(
+	const auto& database = m_databaseManager->getDatabase();
+
+	database->execute(
 		"CREATE TABLE IF NOT EXISTS `users` ("
 		"	`id`		INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
 		"	`username`	TEXT NOT NULL,"

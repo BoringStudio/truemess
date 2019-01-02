@@ -88,7 +88,7 @@ void Core::print(Args&&... args) const
 	std::unique_lock<std::mutex> lock(m_logMutex);
 
 	using dummy = int[];
-	dummy{ (std::cout << args, 0)... };
+	(void)dummy{ 0, (void(std::cout << std::forward<Args>(args)), 0)... };
 	std::cout << std::endl;
 }
 

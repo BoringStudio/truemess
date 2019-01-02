@@ -12,7 +12,7 @@ public:
 	ServerCore()
 	{
 		m_databaseManager = provide<DatabaseManager>("truemess.db");
-		m_networkManager = provide<NetworkManager>();
+		m_networkManager = provide<NetworkManager>(17410);
 		m_userManager = provide<UserManager>();
 		m_roomManager = provide<RoomManager>();
 	}
@@ -23,6 +23,8 @@ public:
 		m_networkManager->init();
 		m_userManager->init();
 		m_roomManager->init();
+
+		m_networkManager->runAcceptor();
 	}
 
 private:
