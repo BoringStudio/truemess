@@ -9,7 +9,7 @@
 
 /*man-start**************************************************************
 
-PDCurses definitions list:  (Only define those needed)
+Define before inclusion (only those needed):
 
     XCURSES         True if compiling for X11.
     PDC_RGB         True if you want to use RGB color definitions
@@ -19,22 +19,20 @@ PDCurses definitions list:  (Only define those needed)
     PDC_NCMOUSE     Use the ncurses mouse API instead
                     of PDCurses' traditional mouse API.
 
-PDCurses portable platform definitions list:
+Defined by this header:
 
     PDC_BUILD       Defines API build version.
     PDCURSES        Enables access to PDCurses-only routines.
-    XOPEN           Always true.
-    SYSVcurses      True if you are compiling for SYSV portability.
-    BSDcurses       True if you are compiling for BSD portability.
 
 **man-end****************************************************************/
 
-#define PDC_BUILD 3601
+#define PDC_BUILD    3701
 #define PDCURSES        1      /* PDCurses-only routines */
-#define XOPEN           1      /* X/Open Curses routines */
-#define SYSVcurses      1      /* System V Curses routines */
-#define BSDcurses       1      /* BSD Curses routines */
 #define CHTYPE_LONG     1      /* size of chtype; long */
+
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+# define PDC_99         1
+#endif
 
 /*----------------------------------------------------------------------*/
 
@@ -46,8 +44,7 @@ PDCurses portable platform definitions list:
 # include <wchar.h>
 #endif
 
-#if defined(__STDC_VERSION__) && __STDC_VERSION >= 199901L && \
-    !defined(__bool_true_false_are_defined)
+#if defined(PDC_99) && !defined(__bool_true_false_are_defined)
 # include <stdbool.h>
 #endif
 
@@ -64,30 +61,20 @@ extern "C"
  */
 
 #undef FALSE
+#define FALSE 0
+
 #undef TRUE
-
-#ifdef __bool_true_false_are_defined
-
-# define FALSE false
-# define TRUE true
-
-#else
-
-typedef unsigned char bool;
-
-# define FALSE 0
-# define TRUE 1
-
-#endif
-
-#undef NULL
-#define NULL (void *)0
+#define TRUE 1
 
 #undef ERR
 #define ERR (-1)
 
 #undef OK
 #define OK 0
+
+#ifndef __bool_true_false_are_defined
+typedef unsigned char bool;
+#endif
 
 #if _LP64
 typedef unsigned int chtype;
@@ -285,7 +272,7 @@ typedef struct
     bool  raw_out;        /* raw output mode (7 v. 8 bits) */
     bool  audible;        /* FALSE if the bell is visual */
     bool  mono;           /* TRUE if current screen is mono */
-    bool  resized;        /* TRUE if TERM has been resized */
+    short resized;        /* TRUE if TERM has been resized */
     bool  orig_attr;      /* TRUE if we have the original colors */
     short orig_fore;      /* original screen foreground color */
     short orig_back;      /* original screen foreground color */

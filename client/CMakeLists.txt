@@ -10,15 +10,17 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin/x86)
 endif()
 
-file(GLOB CLIENT_SRCS
+file(GLOB_RECURSE CLIENT_SRCS
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
 
+add_definitions(-DPDC_WIDE)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-add_executable(client ${CLIENT_SRCS})
+add_executable(truemess ${CLIENT_SRCS})
 
-target_link_libraries(client "${CLIENT_LIBS_DIR}/pdcurses.lib")
+target_link_libraries(truemess "${CLIENT_LIBS_DIR}/pdcurses.lib")
 
