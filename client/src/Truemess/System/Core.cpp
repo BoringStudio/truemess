@@ -2,8 +2,6 @@
 
 #include <exception>
 
-#include "../test/WindowTest.h"
-
 namespace tms {
 Core::Core() : m_isRunning(false), m_logger()
 {
@@ -12,10 +10,10 @@ Core::Core() : m_isRunning(false), m_logger()
 void Core::run()
 {
 	m_logger.init("log.txt", "ru");
+	m_xcursesSupervisor.init();
 
 	try {
-		WindowTest test1;
-		test1.exec();
+
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what();

@@ -12,6 +12,11 @@ XCurses::~XCurses()
 	endwin();
 }
 
+void XCurses::init()
+{
+	this->init(XCursesConfig());
+}
+
 void XCurses::init(const XCursesConfig& config)
 {
 	this->setCBrake(config.enableCBreak);

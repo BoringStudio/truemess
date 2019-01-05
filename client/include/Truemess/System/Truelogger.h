@@ -50,7 +50,7 @@ public:
 		std::string formatedStr = format;
 		for (std::string::iterator it = formatedStr.begin(); it != formatedStr.end(); it++) {
 			//if (*it == )
-			// TODO: truelogger
+			// TODO: finish write function
 		}
 
 		this->write(type, formatedStr, args...);
