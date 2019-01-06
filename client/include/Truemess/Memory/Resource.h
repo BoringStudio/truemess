@@ -34,26 +34,7 @@ public:
 	 */
 	using Ptr = std::unique_ptr<Type, Resource<Type>::Deleter>;
 
-	// TODO: Refactor address class
-	/**
-	 * \brief Address of the frame and offset of it
-	 */
-	class Address
-	{
-	public:
-		Address();
-		Address(typename Resource<Type>::Memory* _frame, size_t _frameOffset);
-
-		/**
-		 * \brief Pointer to the frame
-		 */
-		typename Resource<Type>::Memory* frame;
-
-		/**
-		 * \brief Offset in frame
-		 */
-		size_t frameOffset;
-	};
+	using Address = int8_t*;
 
 	virtual ~Resource();
 
@@ -61,7 +42,7 @@ public:
 	 * \brief Get address pointer
 	 * \return Address pointer
 	 */
-	typename Resource<Type>::Address* getAddress();
+	typename Resource<Type>::Address getAddress();
 
 	/**
 	 * \brief Get ObjectPool pointer
@@ -98,9 +79,9 @@ Resource<Type>::~Resource()
 }
 
 template<typename Type>
-typename Resource<Type>::Address* Resource<Type>::getAddress()
+typename Resource<Type>::Address Resource<Type>::getAddress()
 {
-	return &m_address;
+	return m_address;
 }
 
 template<typename Type>
@@ -114,20 +95,5 @@ inline void Resource<Type>::Deleter::operator()(Resource<Type>* res)
 {
 	res->getObjectPool()->release(res);
 	res->~Resource<Type>();
-}
-
-template<typename Type>
-Resource<Type>::Address::Address() :
-	frame(nullptr),
-	frameOffset(0)
-{
-}
-
-template<typename Type>
-Resource<Type>::Address::Address(typename Resource<Type>::Memory* _frame, size_t _frameOffset) :
-	frame(_frame),
-	frameOffset(_frameOffset)
-{
-
 }
 }

@@ -7,7 +7,7 @@
 #include <Truemess/Memory/Resource.h>
 
 namespace tms {
-class Core;
+class MemoryManager;
 
 template<typename Type>
 class ObjectPool
@@ -31,7 +31,7 @@ public:
 	void release(Resource<Type>* resource);
 
 private:
-	friend class Core;
+	friend class MemoryManager;
 
 	/**
 	 * \brief Size for each frames
@@ -107,7 +107,7 @@ typename Resource<Type>::Ptr ObjectPool<Type>::acquire(const Args& ... args)
 {
 	typename Resource<Type>::Address adr = getFreeAddress();
 
-	Resource<Type>* res = new(&(*adr.frame)[adr.frameOffset]) Type(args...);
+	Resource<Type>* res = new(adr) Type(args...);
 
 	res->m_objectPool = this;
 	res->m_address = adr;
@@ -118,7 +118,7 @@ typename Resource<Type>::Ptr ObjectPool<Type>::acquire(const Args& ... args)
 template<typename Type>
 void ObjectPool<Type>::release(Resource<Type>* resource)
 {
-	m_freeAddresses.push(*resource->getAddress());
+	m_freeAddresses.push(resource->getAddress());
 }
 
 template<typename Type>
@@ -127,6 +127,7 @@ typename Resource<Type>::Address ObjectPool<Type>::getFreeAddress()
 	if (m_freeAddresses.empty()) {
 		addFrame();
 	}
+
 	typename Resource<Type>::Address address = m_freeAddresses.top();
 	m_freeAddresses.pop();
 
@@ -138,9 +139,8 @@ void ObjectPool<Type>::addFrame()
 {
 	m_resources.push_back(Resource<Type>::Memory(m_resourceSize * m_frameSize));
 
-	// TODO: Refactor filling free addresses
-	for (size_t offset = 0; offset < m_resources.back().size(); offset += m_resourceSize) {
-		m_freeAddresses.push(Resource<Type>::Address(&m_resources.back(), offset));
-	}
+    for (auto adr = m_resources.back().begin(); adr != m_resources.back().end(); adr = std::next(adr, m_resourceSize)) {
+		m_freeAddresses.push(&*adr);
+    }
 }
 }
