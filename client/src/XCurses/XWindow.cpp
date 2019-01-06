@@ -2,13 +2,13 @@
 
 XWindow::Status XWindow::addChar(uint32_t ch, int x, int y)
 {
-	mvaddch(y, x, ch);
+	return mvaddch(y, x, ch);
 }
 
 XWindow::Status XWindow::setBorder(const XBorder& border)
 {
 	m_border = border;
-	wborder(m_win, 
+	return wborder(m_win, 
 		border.leftSide, 
 		border.rightSide, 
 		border.topSide,
@@ -21,7 +21,7 @@ XWindow::Status XWindow::setBorder(const XBorder& border)
 
 XWindow::Status XWindow::setBorder(XBorder::Type borderType)
 {
-	this->setBorder(XBorder(borderType));
+	return this->setBorder(XBorder(borderType));
 }
 
 XWindow::Status XWindow::setBorder(uint32_t leftSide,
@@ -33,7 +33,7 @@ XWindow::Status XWindow::setBorder(uint32_t leftSide,
 	uint32_t bottomLeftCorner,
 	uint32_t bottomRightCorner)
 {
-	this->setBorder(XBorder(leftSide,
+	return this->setBorder(XBorder(leftSide,
 		rightSide,
 		topSide,
 		bottomSide,

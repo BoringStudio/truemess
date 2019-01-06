@@ -1,13 +1,16 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
+
 #include <PDCurses/curses.h>
 #include <XCurses/XBorder.h>
 
 class XWindow
 {
 public:
-	typedef int Status;
+	using Status = int;
+	using Ptr = std::unique_ptr<XWindow>;
 
     /**
 	 * \brief Add character in UTF-8 encoding in { x, y } point

@@ -14,11 +14,9 @@ public:
 	void init();
 
     template<typename StateType, typename ... Args>
-	void push(const Args& args...);
+	void push(const Args& ... args);
 
 private:
 	std::list<State::Ptr> m_states;
 };
-
-#include <Truemess/System/StateManager.inl>
 }

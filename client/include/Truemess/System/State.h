@@ -8,15 +8,11 @@ class Core;
 // Base class
 class State {
 public:
-	typedef int Status;
-	typedef std::unique_ptr<State> Ptr;
+	using Status = int;
+	using Ptr = std::unique_ptr<State>;
 
 protected:
-	State() = default;
-	State(const State&) = default;
-	State(State&&) = default;
-
-	friend class Core;
+	friend class StateManager;
 
 	virtual void init() = 0;
 

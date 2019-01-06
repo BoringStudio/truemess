@@ -1,4 +1,5 @@
 #include <Truemess/System/Core.h>
+#include <Truemess/System/Vector.h>
 
 #include <exception>
 
@@ -13,7 +14,7 @@ void Core::run()
 	m_xcursesSupervisor.init();
 
 	try {
-
+		
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what();

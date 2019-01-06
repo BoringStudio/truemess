@@ -5,7 +5,7 @@
 class XCurses
 {
 public:
-	typedef int Status;
+	using Status = int;
 
 	XCurses();
 	~XCurses();
