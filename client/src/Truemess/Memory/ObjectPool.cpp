@@ -9,9 +9,9 @@ ObjectPool::ObjectPool()
 void ObjectPool::destroy()
 {
 	// TODO: Do a safe destroying objects
-	/*for (auto it = m_resources.begin(); it != m_resources.end(); ++it) {
-		for (size_t offset = 0; offset < m_resources.back().size(); offset += m_resourceSize) {
-			m_freeAddresses.push(Resource<Type>::Address(&m_resources.back(), offset));
+	/*for (auto it = m_chunks.begin(); it != m_chunks.end(); ++it) {
+		for (size_t offset = 0; offset < m_chunks.back().size(); offset += m_resourceSize) {
+			m_freeAddresses.push(Resource<Type>::Address(&m_chunks.back(), offset));
 		}
 	}*/
 }
@@ -35,9 +35,9 @@ typename Resource::Address ObjectPool::getFreeAddress()
 
 void ObjectPool::addFrame()
 {
-	m_resources.emplace_back(m_resourceSize * m_frameSize);
+	m_chunks.emplace_back(m_resourceSize * m_chunkSize);
 
-	for (auto adr = m_resources.back().begin(); adr != m_resources.back().end(); adr = std::next(adr, m_resourceSize)) {
+	for (auto adr = m_chunks.back().begin(); adr != m_chunks.back().end(); adr = std::next(adr, m_resourceSize)) {
 		m_freeAddresses.push(&*adr);
 	}
 }

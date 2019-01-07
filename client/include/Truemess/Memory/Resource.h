@@ -16,7 +16,7 @@ public:
 	/**
 	 * \brief Alias std::vector<int8_t>
 	 */
-	using Memory = std::vector<int8_t>;
+	using Chunk = std::vector<int8_t>;
 
 	/**
 	 * \brief Deleter for std::unique_ptr

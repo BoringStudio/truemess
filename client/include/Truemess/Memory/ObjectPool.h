@@ -35,7 +35,7 @@ private:
 	/**
 	 * \brief Size for each frames
 	 */
-	size_t m_frameSize;
+	size_t m_chunkSize;
 
 	/**
 	 * \brief Size of resource (sizeof(Type))
@@ -45,7 +45,7 @@ private:
 	/**
 	 * \brief Resource frames list
 	 */
-	std::list<typename Resource::Memory> m_resources;
+	std::list<typename Resource::Chunk> m_chunks;
 
 	/**
 	 * \brief Free memory for new objects
@@ -54,10 +54,10 @@ private:
 
 	/**
 	 * \brief Initialise first memory frame
-	 * \param frameSize Size of frame
+	 * \param chunkSize Size of frame
 	 */
 	template<typename Type>
-	void init(size_t frameSize = 32);
+	void init(size_t chunkSize = 32);
 
 	/**
 	 * \brief Safe destroy all resources
@@ -77,10 +77,10 @@ private:
 };
 
 template<typename Type>
-void ObjectPool::init(size_t frameSize)
+void ObjectPool::init(size_t chunkSize)
 {
 	m_resourceSize = sizeof(Type);
-	m_frameSize = frameSize;
+	m_chunkSize = chunkSize;
 	this->addFrame();
 }
 
