@@ -93,6 +93,7 @@ bool operator==(const Vector3<T>& left, const Vector3<T>& right);
 template <typename T>
 bool operator!=(const Vector3<T>& left, const Vector3<T>& right);
 
+#pragma region Vector2 Definitions
 /////////////////////////////////////////////////////////////////////////////////////////
 // Vector2
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -201,6 +202,9 @@ bool operator!=(const Vector2<T>& left, const Vector2<T>& right)
 	return (left.x != right.x) || (left.y != right.y);
 }
 
+#pragma endregion
+
+#pragma region Vector3 Definitions
 /////////////////////////////////////////////////////////////////////////////////////////
 // Vector3
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -315,6 +319,8 @@ bool operator!=(const Vector3<T>& left, const Vector3<T>& right)
 {
 	return (left.x != right.x) || (left.y != right.y) || (left.z != right.z);
 }
+
+#pragma endregion
 
 using Vector2u = Vector2<unsigned int>;
 using Vector2f = Vector2<float>;

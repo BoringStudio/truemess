@@ -9,7 +9,6 @@
 namespace tms {
 class MemoryManager;
 
-template<typename Type>
 class ObjectPool
 {
 public:
@@ -21,14 +20,14 @@ public:
 	 * \param args Arguments for constructor
 	 * \return Smart unique pointer to creating object
 	 */
-	template<typename ... Args>
-	typename Resource<Type>::Ptr acquire(const Args& ... args);
+	template<typename Type, typename ... Args>
+	typename Resource::Ptr<Type> acquire(const Args& ... args);
 
 	/**
 	 * \brief Release free memory to pool
 	 * \param resource Object witch want to release memory
 	 */
-	void release(Resource<Type>* resource);
+	void release(Resource* resource);
 
 private:
 	friend class MemoryManager;
@@ -46,17 +45,18 @@ private:
 	/**
 	 * \brief Resource frames list
 	 */
-	std::list<typename Resource<Type>::Memory> m_resources;
+	std::list<typename Resource::Memory> m_resources;
 
 	/**
 	 * \brief Free memory for new objects
 	 */
-	std::stack<typename Resource<Type>::Address> m_freeAddresses;
+	std::stack<typename Resource::Address> m_freeAddresses;
 
 	/**
 	 * \brief Initialise first memory frame
 	 * \param frameSize Size of frame
 	 */
+	template<typename Type>
 	void init(size_t frameSize = 32);
 
 	/**
@@ -68,7 +68,7 @@ private:
 	 * \brief Get next free address
 	 * \return Free address
 	 */
-	typename Resource<Type>::Address getFreeAddress();
+	typename Resource::Address getFreeAddress();
 
 	/**
 	 * \brief Add clean frame
@@ -77,70 +77,23 @@ private:
 };
 
 template<typename Type>
-ObjectPool<Type>::ObjectPool()
-{
-
-}
-
-template<typename Type>
-void ObjectPool<Type>::init(size_t frameSize)
+void ObjectPool::init(size_t frameSize)
 {
 	m_resourceSize = sizeof(Type);
 	m_frameSize = frameSize;
 	this->addFrame();
 }
 
-template<typename Type>
-void ObjectPool<Type>::destroy()
+template<typename Type, typename ... Args>
+typename Resource::Ptr<Type> ObjectPool::acquire(const Args& ... args)
 {
-	// TODO: Do a safe destroying objects
-	/*for (auto it = m_resources.begin(); it != m_resources.end(); ++it) {
-		for (size_t offset = 0; offset < m_resources.back().size(); offset += m_resourceSize) {
-			m_freeAddresses.push(Resource<Type>::Address(&m_resources.back(), offset));
-		}
-	}*/
-}
+	Resource::Address address = getFreeAddress();
 
-template<typename Type>
-template<typename ... Args>
-typename Resource<Type>::Ptr ObjectPool<Type>::acquire(const Args& ... args)
-{
-	typename Resource<Type>::Address adr = getFreeAddress();
-
-	Resource<Type>* res = new(adr) Type(args...);
+	Resource* res = new(address) Type(args...);
 
 	res->m_objectPool = this;
-	res->m_address = adr;
+	res->m_address = address;
 
-	return Resource<Type>::Ptr(reinterpret_cast<Type*>(res));
-}
-
-template<typename Type>
-void ObjectPool<Type>::release(Resource<Type>* resource)
-{
-	m_freeAddresses.push(resource->getAddress());
-}
-
-template<typename Type>
-typename Resource<Type>::Address ObjectPool<Type>::getFreeAddress()
-{
-	if (m_freeAddresses.empty()) {
-		addFrame();
-	}
-
-	typename Resource<Type>::Address address = m_freeAddresses.top();
-	m_freeAddresses.pop();
-
-	return address;
-}
-
-template<typename Type>
-void ObjectPool<Type>::addFrame()
-{
-	m_resources.push_back(Resource<Type>::Memory(m_resourceSize * m_frameSize));
-
-    for (auto adr = m_resources.back().begin(); adr != m_resources.back().end(); adr = std::next(adr, m_resourceSize)) {
-		m_freeAddresses.push(&*adr);
-    }
+	return Resource::Ptr<Type>(reinterpret_cast<Type*>(res));
 }
 }
